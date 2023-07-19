@@ -54,3 +54,31 @@ class Model :
         result = cur.fetchone()
 
         return result
+
+    @query
+    def set_habitacion(self,con:Connection[Cursor],cur:Cursor,codigo:int | str,numero:int,tipo:str,capacidad:str,precio:float,status:str) -> int:
+        """
+            metodo para crear las habitaciones
+            :param con: conexion a la base de datos esta viene por el decorador query
+            :param cur: cursor de la base de datos este viene por el decorador query
+            :param codigo: 
+        """
+        cur.execute(f"INSERT INTO habitacion (cod_hab,num_hab,tip_hab,cap_hab,pre_hab,sta_hab) VALUES ('{codigo}','{numero}','{tipo}','{capacidad}',{precio},'{status}')")
+        con.commit()
+
+        result = cur.rowcount
+        return result
+
+    @query
+    def update_habitacion(self,con:Connection[Cursor],cur:Cursor,codigo:int | str,old_codigo,numero:int,tipo:str,capacidad:str,precio:float,status:str):
+        cur.execute(f"UPDATE habitacion SET cod_hab='{codigo}',num_hab='{numero}',tip_hab='{tipo}',cap_hab='{capacidad}',pre_hab={precio},sta_hab='{status}' WHERE cod_hab={old_codigo}")
+        con.commit()
+        result = cur.rowcount
+        return result
+
+    @query
+    def del_habitacion(self,con: Connection[Cursor],cur: Cursor,codigo):
+        cur.execute(f"DELETE FROM habitacion WHERE cod_hab={codigo}")
+        con.commit()
+        result = cur.rowcount
+        return result
